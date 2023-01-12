@@ -98,7 +98,7 @@ function App() {
 
   return (
     <Container h="100vh" maxW='container.lg'>
-      <FilterPanel table={table} />
+      <FilterPanel table={table} setColumnOrder={setColumnOrder} />
       <Card>
         <TableContainer>
           <Table>

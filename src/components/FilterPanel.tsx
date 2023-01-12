@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table } from '@tanstack/react-table';
+import { Table, Column } from '@tanstack/react-table';
 import { Person } from '../mock/makeData';
 import { 
   Drawer,
@@ -13,16 +13,42 @@ import {
   Button,
   Checkbox,
   Box,
+  Flex,
+  Heading,
+  IconButton,
+  Stack,
 } from '@chakra-ui/react'
+import { Reorder, useMotionValue } from "framer-motion";
+import { AiOutlineFilter } from 'react-icons/ai';
+import { useRaisedShadow } from '../hooks/useRaisedShadow';
+interface Props {
+  item: Column<Person, unknown>
+}
 
-const FilterPanel = ({ table }: { table: Table<Person> }) => {
-  const { isOpen, onOpen, onClose } = useDisclosure()
+export const Item = ({ item }: Props) => {
+  const y = useMotionValue(0);
+  const boxShadow = useRaisedShadow(y);
 
   return (
-    <>
-      <Button colorScheme='teal' onClick={onOpen}>
-        Open
-      </Button>
+    <Reorder.Item as="div" value={item.id} id={item.id} style={{ boxShadow, y, padding: '8px 12px', borderRadius: '5px' }}>
+      <Checkbox
+        isChecked={item.getIsVisible()}
+        onChange={item.getToggleVisibilityHandler()}
+      >
+        {item.id}
+      </Checkbox>
+    </Reorder.Item>
+  );
+};
+
+const FilterPanel = ({ table }: { table: Table<Person>, setColumnOrder: (newOrder: any[]) => void }) => {
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  useRaisedShadow
+
+  return (
+    <Flex justifyContent="space-between" py={2} px={3}>
+      <Heading>Title</Heading>
+      <IconButton as={AiOutlineFilter} onClick={onOpen} aria-label={''} p={2}/>
       <Drawer
         isOpen={isOpen}
         placement='right'
@@ -31,11 +57,11 @@ const FilterPanel = ({ table }: { table: Table<Person> }) => {
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
-          <DrawerHeader>Create your account</DrawerHeader>
+          <DrawerHeader>Filter</DrawerHeader>
 
           <DrawerBody>
-            <Box className="inline-block border border-black shadow rounded">
-              <Box className="px-1 border-b border-black">
+            <Box>
+              <Box py={2} px={3}>
                 <Checkbox
                   isChecked={table.getIsAllColumnsVisible()}
                   onChange={table.getToggleAllColumnsVisibilityHandler()}
@@ -43,22 +69,11 @@ const FilterPanel = ({ table }: { table: Table<Person> }) => {
                   Toggle All
                 </Checkbox>
               </Box>
-              {table.getAllLeafColumns().map(column => {
-                return (
-                  <div key={column.id} className="px-1">
-                    <label>
-                      <input
-                        {...{
-                          type: 'checkbox',
-                          checked: column.getIsVisible(),
-                          onChange: column.getToggleVisibilityHandler(),
-                        }}
-                      />{' '}
-                      {column.id}
-                    </label>
-                  </div>
-                )
-              })}
+              <Reorder.Group axis="y" onReorder={table.setColumnOrder} values={table.getAllLeafColumns().map((column) => column.id)}>
+                <Stack spacing={[1]} direction={['column']}>
+                  {table.getAllLeafColumns().map(column => <Item key={column.id} item={column} />)}
+                </Stack>
+              </Reorder.Group>
             </Box>
           </DrawerBody>
 
@@ -66,12 +81,11 @@ const FilterPanel = ({ table }: { table: Table<Person> }) => {
             <Button variant='outline' mr={3} onClick={onClose}>
               Cancel
             </Button>
-            <Button colorScheme='blue'>Save</Button>
           </DrawerFooter>
         </DrawerContent>
       </Drawer>
 
-    </>
+    </Flex>
   )
 }
 
