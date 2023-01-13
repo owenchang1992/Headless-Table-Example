@@ -34,7 +34,12 @@ export const Item = ({ item }: Props) => {
   const boxShadow = useRaisedShadow(y);
 
   return (
-    <Reorder.Item as="div" value={item.id} id={item.id} style={{ boxShadow, y, padding: '8px 12px', borderRadius: '5px' }}>
+    <Reorder.Item
+      as="div"
+      value={item.id}
+      id={item.id}
+      style={{ boxShadow, y, padding: '8px 12px', borderRadius: '5px' }}
+    >
       <Checkbox
         isChecked={item.getIsVisible()}
         onChange={item.getToggleVisibilityHandler()}
@@ -64,20 +69,18 @@ const FilterPanel = ({ table }: { table: Table<Person>, setColumnOrder: (newOrde
           <DrawerHeader>Display Columns</DrawerHeader>
           <Divider />
           <DrawerBody>
-            <Box>
-              <Checkbox
-                py={2}
-                isChecked={table.getIsAllColumnsVisible()}
-                onChange={table.getToggleAllColumnsVisibilityHandler()}
-              >
-                Toggle All
-              </Checkbox>
-              <Reorder.Group axis="y" onReorder={table.setColumnOrder} values={table.getAllLeafColumns().map((column) => column.id)}>
-                <Stack pl={2} spacing={[1]} direction={['column']}>
-                  {table.getAllLeafColumns().map(column => <Item key={column.id} item={column} />)}
-                </Stack>
-              </Reorder.Group>
-            </Box>
+            <Checkbox
+              py={2}
+              isChecked={table.getIsAllColumnsVisible()}
+              onChange={table.getToggleAllColumnsVisibilityHandler()}
+            >
+              Toggle All
+            </Checkbox>
+            <Reorder.Group axis="y" onReorder={table.setColumnOrder} values={table.getAllLeafColumns().map((column) => column.id)}>
+              <Stack pl={2} spacing={[1]} direction={['column']}>
+                {table.getAllLeafColumns().map(column => <Item key={column.id} item={column} />)}
+              </Stack>
+            </Reorder.Group>
           </DrawerBody>
 
           <DrawerFooter>

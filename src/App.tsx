@@ -10,7 +10,6 @@ import {
   Card,
   TableContainer,
   Container,
-  Button,
   Box,
 } from '@chakra-ui/react'
 
@@ -24,9 +23,7 @@ import {
 } from '@tanstack/react-table';
 
 import { makeData, Person } from './mock/makeData'
-import { faker } from '@faker-js/faker'
-import FilterPanel from './components/FilterPanel';
-import { Reorder } from 'framer-motion';
+import TableHeader from './components/TableHeader';
 
 const defaultColumns: ColumnDef<Person>[] = [
   {
@@ -92,7 +89,7 @@ function App() {
 
   return (
     <Container h="100vh" maxW='container.lg'>
-      <FilterPanel table={table} setColumnOrder={setColumnOrder} />
+      <TableHeader table={table} setColumnOrder={setColumnOrder} />
       <Card>
         <TableContainer>
           <Table>
