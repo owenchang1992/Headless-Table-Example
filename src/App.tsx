@@ -90,12 +90,6 @@ function App() {
     debugColumns: true,
   })
 
-  const randomizeColumns = () => {
-    table.setColumnOrder(
-      faker.helpers.shuffle(table.getAllLeafColumns().map(d => d.id))
-    )
-  }
-
   return (
     <Container h="100vh" maxW='container.lg'>
       <FilterPanel table={table} setColumnOrder={setColumnOrder} />

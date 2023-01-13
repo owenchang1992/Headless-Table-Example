@@ -17,10 +17,14 @@ import {
   Heading,
   IconButton,
   Stack,
+  Divider,
+  useBreakpointValue,
+  DrawerProps,
 } from '@chakra-ui/react'
 import { Reorder, useMotionValue } from "framer-motion";
-import { AiOutlineFilter } from 'react-icons/ai';
 import { useRaisedShadow } from '../hooks/useRaisedShadow';
+import { SettingsIcon } from '@chakra-ui/icons';
+
 interface Props {
   item: Column<Person, unknown>
 }
@@ -43,34 +47,33 @@ export const Item = ({ item }: Props) => {
 
 const FilterPanel = ({ table }: { table: Table<Person>, setColumnOrder: (newOrder: any[]) => void }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  useRaisedShadow
+  const placement = useBreakpointValue<DrawerProps['placement']>({ base: 'bottom', md: 'right' })
 
   return (
     <Flex justifyContent="space-between" py={2} px={3}>
       <Heading>Title</Heading>
-      <IconButton as={AiOutlineFilter} onClick={onOpen} aria-label={''} p={2}/>
+      <IconButton as={SettingsIcon} onClick={onOpen} aria-label={''} p={2}/>
       <Drawer
         isOpen={isOpen}
-        placement='right'
+        placement={placement}
         onClose={onClose}
       >
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
-          <DrawerHeader>Filter</DrawerHeader>
-
+          <DrawerHeader>Display Columns</DrawerHeader>
+          <Divider />
           <DrawerBody>
             <Box>
-              <Box py={2} px={3}>
-                <Checkbox
-                  isChecked={table.getIsAllColumnsVisible()}
-                  onChange={table.getToggleAllColumnsVisibilityHandler()}
-                >
-                  Toggle All
-                </Checkbox>
-              </Box>
+              <Checkbox
+                py={2}
+                isChecked={table.getIsAllColumnsVisible()}
+                onChange={table.getToggleAllColumnsVisibilityHandler()}
+              >
+                Toggle All
+              </Checkbox>
               <Reorder.Group axis="y" onReorder={table.setColumnOrder} values={table.getAllLeafColumns().map((column) => column.id)}>
-                <Stack spacing={[1]} direction={['column']}>
+                <Stack pl={2} spacing={[1]} direction={['column']}>
                   {table.getAllLeafColumns().map(column => <Item key={column.id} item={column} />)}
                 </Stack>
               </Reorder.Group>
