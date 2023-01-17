@@ -1,6 +1,6 @@
 import React from 'react';
 import { Table, Column } from '@tanstack/react-table';
-import { Person } from '../mock/makeData';
+import { Person } from '../../mock/makeData';
 import { 
   Drawer,
   DrawerBody,
@@ -20,10 +20,11 @@ import {
   Divider,
   useBreakpointValue,
   DrawerProps,
+  ButtonGroup,
 } from '@chakra-ui/react'
 import { Reorder, useMotionValue } from "framer-motion";
-import { useRaisedShadow } from '../hooks/useRaisedShadow';
-import { SettingsIcon } from '@chakra-ui/icons';
+import { useRaisedShadow } from '../../hooks/useRaisedShadow';
+import { BsLayoutThreeColumns } from 'react-icons/bs';
 
 interface Props {
   item: Column<Person, unknown>
@@ -50,14 +51,24 @@ export const Item = ({ item }: Props) => {
   );
 };
 
-const FilterPanel = ({ table }: { table: Table<Person>, setColumnOrder: (newOrder: any[]) => void }) => {
+const TableHeaderPanel = ({ table }: { table: Table<Person> }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const placement = useBreakpointValue<DrawerProps['placement']>({ base: 'bottom', md: 'right' })
 
   return (
-    <Flex justifyContent="space-between" py={2} px={3}>
+    <Flex justifyContent="space-between" alignItems="center" py={2} px={3}>
       <Heading>Title</Heading>
-      <IconButton as={SettingsIcon} onClick={onOpen} aria-label={''} p={2}/>
+      <ButtonGroup size="sm" isAttached variant='outline'>
+        <Button>
+          Filter
+        </Button>
+        <Button>
+          Sort
+        </Button>
+        <Button onClick={onOpen} aria-label={'column'}>
+          Column
+        </Button>
+      </ButtonGroup>
       <Drawer
         isOpen={isOpen}
         placement={placement}
@@ -90,9 +101,8 @@ const FilterPanel = ({ table }: { table: Table<Person>, setColumnOrder: (newOrde
           </DrawerFooter>
         </DrawerContent>
       </Drawer>
-
     </Flex>
   )
 }
 
-export default FilterPanel;
+export default TableHeaderPanel;

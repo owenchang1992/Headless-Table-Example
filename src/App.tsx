@@ -23,7 +23,7 @@ import {
 } from '@tanstack/react-table';
 
 import { makeData, Person } from './mock/makeData'
-import TableHeader from './components/TableHeader';
+import TableHeader from './components/Table/TableHeader';
 
 const defaultColumns: ColumnDef<Person>[] = [
   {
@@ -89,7 +89,7 @@ function App() {
 
   return (
     <Container h="100vh" maxW='container.lg'>
-      <TableHeader table={table} setColumnOrder={setColumnOrder} />
+      <TableHeader table={table} />
       <Card>
         <TableContainer>
           <Table>
