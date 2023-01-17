@@ -56,7 +56,7 @@ const TableHeaderPanel = ({ table }: { table: Table<Person> }) => {
   const placement = useBreakpointValue<DrawerProps['placement']>({ base: 'bottom', md: 'right' })
 
   return (
-    <Flex justifyContent="space-between" alignItems="center" py={2} px={3}>
+    <Flex justifyContent="space-between" alignItems="center" py={2}>
       <Heading>Title</Heading>
       <ButtonGroup size="sm" isAttached variant='outline'>
         <Button>
