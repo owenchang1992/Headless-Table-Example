@@ -54,7 +54,6 @@ const PaginationBar = ({ table }: { table: Table<Person> }) => (
         />
       </Flex>
       <Select
-        placeholder='Show'
         size="sm"
         w="22"
         value={table.getState().pagination.pageSize}
