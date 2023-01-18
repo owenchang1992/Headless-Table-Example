@@ -21,6 +21,8 @@ import {
   ColumnOrderState,
   getFilteredRowModel,
   getPaginationRowModel,
+  SortingState,
+  getSortedRowModel,
 } from '@tanstack/react-table';
 
 import { makeData, Person } from '../../mock/makeData'
@@ -69,6 +71,7 @@ const useMockPersonTable = () => {
   const [data] = React.useState(() => makeData(5000))
   const [columns] = React.useState(() => [...defaultColumns])
 
+  const [sorting, setSorting] = React.useState<SortingState>([{ id: 'firstName', desc: true }])
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
   const [columnOrder, setColumnOrder] = React.useState<ColumnOrderState>(defaultColumnOrder)
   const [columnPinning, setColumnPinning] = React.useState({})
@@ -80,10 +83,13 @@ const useMockPersonTable = () => {
       columnVisibility,
       columnOrder,
       columnPinning,
+      sorting,
     },
+    onSortingChange: setSorting,
     onColumnVisibilityChange: setColumnVisibility,
     onColumnOrderChange: setColumnOrder,
     onColumnPinningChange: setColumnPinning,
+    getSortedRowModel: getSortedRowModel(),
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -91,6 +97,8 @@ const useMockPersonTable = () => {
     debugHeaders: true,
     debugColumns: true,
   })
+
+  console.log({sorting, columnOrder})
 
   return table;
 }

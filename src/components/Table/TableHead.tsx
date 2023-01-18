@@ -54,8 +54,16 @@ const TableHead = ({ header }: { header: Header<Person, unknown> }) => {
               Pin right
             </MenuItem>
           )}
-          <MenuItem>Sort ascending</MenuItem>
-          <MenuItem>Sort ascending</MenuItem>
+          <MenuItem
+            onClick={() => header.column.toggleSorting(false)}
+          >
+            Sort ascending
+          </MenuItem>
+          <MenuItem
+            onClick={() => header.column.toggleSorting(true)}
+          >
+            Sort descending
+          </MenuItem>
         </MenuList>
       </Menu>
     </Th>
