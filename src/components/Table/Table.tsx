@@ -26,6 +26,7 @@ import {
 import { makeData, Person } from '../../mock/makeData'
 import TableHeader from './TableHeader';
 import PaginationBar from './PaginationBar';
+import TableHead from './TableHead';
 
 const defaultColumns: ColumnDef<Person>[] = [
   {
@@ -107,16 +108,7 @@ const MainTable = () => {
               {table.getHeaderGroups().map((headerGroup) => (
                 <Tr key={headerGroup.id}>
                   {headerGroup.headers.map((header) => (
-                    <Th key={header.id}>
-                      <Box>
-                        {header?.isPlaceholder
-                          ? null
-                          : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                      </Box>
-                    </Th>
+                    <TableHead header={header}/>
                   ))}
                 </Tr>
               ))}
