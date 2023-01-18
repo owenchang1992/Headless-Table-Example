@@ -27,8 +27,33 @@ const TableHead = ({ header }: { header: Header<Person, unknown> }) => {
             )}
         </MenuButton>
         <MenuList>
-          <MenuItem>Pin left</MenuItem>
-          <MenuItem>Pin right</MenuItem>
+          {header.column.getIsPinned() !== 'left' && (
+            <MenuItem
+              onClick={() => {
+                header.column.pin('left')
+              }}
+            >
+              Pin left
+            </MenuItem>
+          )}
+          {header.column.getIsPinned() && (
+            <MenuItem
+              onClick={() => {
+                header.column.pin(false)
+              }}
+            >
+              Unpinned
+            </MenuItem>
+          )}
+          {header.column.getIsPinned() !== 'right' && (
+            <MenuItem
+              onClick={() => {
+                header.column.pin('right')
+              }}
+            >
+              Pin right
+            </MenuItem>
+          )}
           <MenuItem>Sort ascending</MenuItem>
           <MenuItem>Sort ascending</MenuItem>
         </MenuList>

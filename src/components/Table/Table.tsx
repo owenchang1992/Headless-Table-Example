@@ -116,7 +116,12 @@ const MainTable = () => {
             <Tbody>
               {table.getRowModel().rows.slice(0, 20).map((row) => (
                 <Tr key={row.id}>
-                  {row.getVisibleCells().map((cell) => (
+                  {row.getLeftVisibleCells().map((cell) => (
+                    <Td key={cell.id}>
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </Td>
+                  ))}
+                  {row.getCenterVisibleCells().map((cell) => (
                     <Td key={cell.id}>
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </Td>
