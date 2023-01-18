@@ -19,10 +19,13 @@ import {
   useReactTable,
   VisibilityState,
   ColumnOrderState,
+  getFilteredRowModel,
+  getPaginationRowModel,
 } from '@tanstack/react-table';
 
 import { makeData, Person } from '../../mock/makeData'
 import TableHeader from './TableHeader';
+import PaginationBar from './PaginationBar';
 
 const defaultColumns: ColumnDef<Person>[] = [
   {
@@ -62,7 +65,7 @@ const defaultColumns: ColumnDef<Person>[] = [
 const defaultColumnOrder = ['progress', 'firstName', 'lastName', 'age', 'visits', 'status',]
 
 const useMockPersonTable = () => {
-  const [data] = React.useState(() => makeData(50))
+  const [data] = React.useState(() => makeData(5000))
   const [columns] = React.useState(() => [...defaultColumns])
 
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
@@ -81,6 +84,8 @@ const useMockPersonTable = () => {
     onColumnOrderChange: setColumnOrder,
     onColumnPinningChange: setColumnPinning,
     getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
     debugTable: true,
     debugHeaders: true,
     debugColumns: true,
@@ -146,6 +151,7 @@ const MainTable = () => {
           </Table>
         </TableContainer>
       </Card>
+      <PaginationBar table={table} />
     </>
   )
 }
