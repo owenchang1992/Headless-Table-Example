@@ -59,12 +59,6 @@ const TableHeaderPanel = ({ table }: { table: Table<Person> }) => {
     <Flex justifyContent="space-between" alignItems="center" py={2}>
       <Heading>Title</Heading>
       <ButtonGroup size="sm" isAttached variant='outline'>
-        <Button>
-          Filter
-        </Button>
-        <Button>
-          Sort
-        </Button>
         <Button onClick={onOpen} aria-label={'column'}>
           Column
         </Button>

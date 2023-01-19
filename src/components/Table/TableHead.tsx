@@ -83,7 +83,7 @@ const TableHead = ({ header, table }: {
           </MenuGroup>
           <MenuDivider />
           {/* TODO: need to figure out what happens here */}
-          <MenuGroup title="Filter">
+          <MenuGroup title="Filter" />
             {
               typeof firstValue === 'number' ? (
                 <Flex gap="3">
@@ -125,7 +125,6 @@ const TableHead = ({ header, table }: {
                 />
               )
             }
-          </MenuGroup>
         </MenuList>
       </Menu>
     </Th>
