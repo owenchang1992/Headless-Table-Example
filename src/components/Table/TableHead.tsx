@@ -10,13 +10,21 @@ import {
   MenuDivider,
   Box,
   Th,
-  Input
+  Input,
+  Flex,
 } from '@chakra-ui/react';
 
-import { Header, flexRender } from '@tanstack/react-table';
+import { Header, flexRender, Table } from '@tanstack/react-table';
 import { Person } from '../../mock/makeData';
 
-const TableHead = ({ header }: { header: Header<Person, unknown> }) => {
+const TableHead = ({ header, table }: {
+  header: Header<Person, unknown> 
+  table: Table<any>
+}) => {
+  const firstValue = table
+    .getPreFilteredRowModel()
+    .flatRows[0]?.getValue(header.column.id)
+
   const deferredInputValue = useDeferredValue(header.column.getFilterValue())
 
   return (
@@ -76,14 +84,47 @@ const TableHead = ({ header }: { header: Header<Person, unknown> }) => {
           <MenuDivider />
           {/* TODO: need to figure out what happens here */}
           <MenuGroup title="Filter">
-            <Input
-              type="text"
-              size="md"
-              mx="3"
-              w="calc(100% - 24px)"
-              value={(deferredInputValue ?? '') as string}
-              onChange={e => header.column.setFilterValue(e.target.value)}
-            />
+            {
+              typeof firstValue === 'number' ? (
+                <Flex gap="3">
+                  <Input
+                    type="number"
+                    size="sm"
+                    placeholder='min'
+                    flex="1 1 50%"
+                    marginInlineStart="3"
+                    value={(deferredInputValue as [number, number])?.[0] ?? ''}
+                    onChange={e => {
+                      header.column.setFilterValue(
+                        (old: [number, number]) => [e.target.value, old?.[1]]
+                      )
+                    }}
+                  />
+                  <Input
+                    type="number"
+                    size="sm"
+                    placeholder='max'
+                    marginInlineEnd="3"
+                    flex="1 1 50%"
+                    value={(deferredInputValue as [number, number])?.[1] ?? ''}
+                    onChange={e => {
+                      header.column.setFilterValue(
+                        (old: [number, number]) => [old?.[0], e.target.value]
+                      )
+                    }}
+                  />
+                </Flex>
+              ) : (
+                <Input
+                  type="text"
+                  size="md"
+                  mx="3"
+                  w="calc(100% - 24px)"
+                  value={(deferredInputValue ?? '') as string}
+                  onChange={e => header.column.setFilterValue(e.target.value)}
+                />
+              )
+            }
           </MenuGroup>
         </MenuList>
       </Menu>

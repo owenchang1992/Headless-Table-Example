@@ -118,7 +118,7 @@ const MainTable = () => {
               {table.getLeftHeaderGroups().map((headerGroup) => (
                 <Tr key={headerGroup.id}>
                   {headerGroup.headers.map((header) => (
-                    <TableHead header={header} />
+                    <TableHead header={header} table={table}/>
                   ))}
                 </Tr>
               ))}
@@ -156,7 +156,7 @@ const MainTable = () => {
               {table.getCenterHeaderGroups().map((headerGroup) => (
                 <Tr key={headerGroup.id}>
                   {headerGroup.headers.map((header) => (
-                    <TableHead header={header}/>
+                    <TableHead header={header} table={table} />
                   ))}
                 </Tr>
               ))}
@@ -194,7 +194,7 @@ const MainTable = () => {
               {table.getRightHeaderGroups().map((headerGroup) => (
                 <Tr key={headerGroup.id}>
                   {headerGroup.headers.map((header) => (
-                    <TableHead header={header} />
+                    <TableHead header={header} table={table} />
                   ))}
                 </Tr>
               ))}
