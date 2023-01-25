@@ -28,7 +28,7 @@ const TableHead = ({ header, table }: {
   const deferredInputValue = useDeferredValue(header.column.getFilterValue())
 
   return (
-    <Th key={header.id}>
+    <Th key={header.id} w={header.getSize()}>
       <Menu>
         <MenuButton as={Box} >
           {header?.isPlaceholder

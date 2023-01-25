@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Table,
   Thead,
@@ -7,6 +7,7 @@ import {
   Tr,
   Th,
   Td,
+  Flex,
   TableContainer,
   Box,
   Card,
@@ -24,6 +25,7 @@ import {
   SortingState,
   getSortedRowModel,
   ColumnFiltersState,
+  ColumnResizeMode,
 } from '@tanstack/react-table';
 
 import { makeData, Person } from '../../mock/makeData'
@@ -61,6 +63,7 @@ const defaultColumns: ColumnDef<Person>[] = [
   },
   {
     accessorKey: 'progress',
+    size: 200,
     header: 'Profile Progress',
     footer: props => props.column.id,
   },
@@ -88,6 +91,7 @@ const useMockPersonTable = () => {
       sorting,
       columnFilters,
     },
+    columnResizeMode: 'onChange',
     onColumnFiltersChange: setColumnFilters,
     onSortingChange: setSorting,
     onColumnVisibilityChange: setColumnVisibility,
@@ -107,18 +111,46 @@ const useMockPersonTable = () => {
 
 const MainTable = () => {
   const table = useMockPersonTable();
+  const tableContainerRef = useRef<null | HTMLDivElement>(null);
+  const [containerWidth, setContainerWidth] = useState<number>(table.getTotalSize());
+  const rerender = React.useReducer(() => ({}), {})[1]
+
+  console.log({
+    left: table.getLeftTotalSize(),
+    center: table.getCenterTotalSize(),
+    right: table.getRightTotalSize(),
+    containerWidth,
+    test: containerWidth - table.getLeftTotalSize() - table.getRightTotalSize()
+  })
+
+  useEffect(() => {
+    if (tableContainerRef.current) {
+      setContainerWidth(tableContainerRef.current.offsetWidth);
+    }
+  }, [tableContainerRef.current])
 
   return (
-    <>
+    <Flex flexDirection="column" alignItems="center" w={table.getTotalSize()}>
       <TableHeader table={table} />
-      <Card>
-        <TableContainer display="flex">
-          <Table flex="0 1 0" boxShadow="lg" >
-            <Thead>
+      <Card >
+        <TableContainer
+          ref={tableContainerRef}
+          display="flex"
+          w="full"
+          zIndex={10}
+        >
+          <Table
+            boxShadow="lg"
+            left="0"
+            position="absolute"
+            width={table.getLeftTotalSize()}
+            backgroundColor="white"
+          >
+            <Thead >
               {table.getLeftHeaderGroups().map((headerGroup) => (
                 <Tr key={headerGroup.id}>
                   {headerGroup.headers.map((header) => (
-                    <TableHead header={header} table={table}/>
+                    <TableHead header={header} table={table} />
                   ))}
                 </Tr>
               ))}
@@ -127,31 +159,19 @@ const MainTable = () => {
               {table.getRowModel().rows.slice(0, 20).map((row) => (
                 <Tr key={row.id}>
                   {row.getLeftVisibleCells().map((cell) => (
-                    <Td key={cell.id}>
+                    <Td key={cell.id} w={cell.column.getSize()}>
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </Td>
                   ))}
                 </Tr>
               ))}
             </Tbody>
-            <Tfoot>
-              {table.getLeftFooterGroups().map((footerGroup) => (
-                <Tr key={footerGroup.id}>
-                  {footerGroup.headers.map((header) => (
-                    <Th key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                          header.column.columnDef.footer,
-                          header.getContext()
-                        )}
-                    </Th>
-                  ))}
-                </Tr>
-              ))}
-            </Tfoot>
           </Table>
-          <Table  flex="1 1 0" >
+          <Table
+            w={table.getCenterTotalSize()}
+            ml={table.getLeftTotalSize()}
+            mr={table.getRightTotalSize()}
+          >
             <Thead>
               {table.getCenterHeaderGroups().map((headerGroup) => (
                 <Tr key={headerGroup.id}>
@@ -165,31 +185,21 @@ const MainTable = () => {
               {table.getRowModel().rows.slice(0, 20).map((row) => (
                 <Tr key={row.id}>
                   {row.getCenterVisibleCells().map((cell) => (
-                    <Td key={cell.id}>
+                    <Td key={cell.id} w={cell.column.getSize()}>
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </Td>
                   ))}
                 </Tr>
               ))}
             </Tbody>
-            <Tfoot>
-              {table.getCenterFooterGroups().map((footerGroup) => (
-                <Tr key={footerGroup.id}>
-                  {footerGroup.headers.map((header) => (
-                    <Th key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                          header.column.columnDef.footer,
-                          header.getContext()
-                        )}
-                    </Th>
-                  ))}
-                </Tr>
-              ))}
-            </Tfoot>
           </Table>
-          <Table flex="0 1 0" boxShadow="lg">
+          <Table
+            boxShadow="lg"
+            position="absolute"
+            right="0"
+            backgroundColor="white"
+            w={table.getRightTotalSize()}
+          >
             <Thead>
               {table.getRightHeaderGroups().map((headerGroup) => (
                 <Tr key={headerGroup.id}>
@@ -203,34 +213,18 @@ const MainTable = () => {
               {table.getRowModel().rows.slice(0, 20).map((row) => (
                 <Tr key={row.id}>
                   {row.getRightVisibleCells().map((cell) => (
-                    <Td key={cell.id}>
+                    <Td key={cell.id} w={cell.column.getSize()}>
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </Td>
                   ))}
                 </Tr>
               ))}
             </Tbody>
-            <Tfoot>
-              {table.getRightFooterGroups().map((footerGroup) => (
-                <Tr key={footerGroup.id}>
-                  {footerGroup.headers.map((header) => (
-                    <Th key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                          header.column.columnDef.footer,
-                          header.getContext()
-                        )}
-                    </Th>
-                  ))}
-                </Tr>
-              ))}
-            </Tfoot>
           </Table>
         </TableContainer>
       </Card>
       <PaginationBar table={table} />
-    </>
+    </Flex>
   )
 }
 

@@ -3,7 +3,7 @@ import { Person } from '../../mock/makeData';
 import { ButtonGroup, Button, Flex, Box, Input, Select } from '@chakra-ui/react';
 
 const PaginationBar = ({ table }: { table: Table<Person> }) => (
-  <Flex alignItems="center" py="2" justifyContent="space-between">
+  <Flex alignItems="center" py="2" justifyContent="space-between" w="full">
     <Flex gap="5">
       <ButtonGroup variant="outline" size="sm">
         <Button
