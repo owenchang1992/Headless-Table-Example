@@ -130,13 +130,13 @@ const MainTable = () => {
   }, [tableContainerRef.current])
 
   return (
-    <Flex flexDirection="column" alignItems="center" w={table.getTotalSize()}>
+    <Flex flexDirection="column" alignItems="center" w="full">
       <TableHeader table={table} />
-      <Card >
+      <Card w="full">
         <TableContainer
           ref={tableContainerRef}
           display="flex"
-          w="full"
+          w={table.getTotalSize()}
           zIndex={10}
         >
           <Table
