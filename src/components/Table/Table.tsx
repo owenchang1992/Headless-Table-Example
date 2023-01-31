@@ -116,7 +116,12 @@ const MainTable = () => {
   return (
     <Flex flexDirection="column" alignItems="center" w="full">
       <TableHeader table={table} />
-      <Card w="full">
+      <Card
+        w="fit-content"
+        maxWidth="full"
+        overflowX="hidden"
+        position="relative"
+      >
         <TableContainer
           ref={tableContainerRef}
           display="flex"
@@ -152,7 +157,8 @@ const MainTable = () => {
             </Tbody>
           </Table>
           <Table
-            w={table.getCenterTotalSize()}
+            w={table.getTotalSize()}
+            minWidth={table.getCenterTotalSize()}
             ml={table.getLeftTotalSize()}
             mr={table.getRightTotalSize()}
           >
