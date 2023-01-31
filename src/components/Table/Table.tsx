@@ -112,22 +112,6 @@ const useMockPersonTable = () => {
 const MainTable = () => {
   const table = useMockPersonTable();
   const tableContainerRef = useRef<null | HTMLDivElement>(null);
-  const [containerWidth, setContainerWidth] = useState<number>(table.getTotalSize());
-  const rerender = React.useReducer(() => ({}), {})[1]
-
-  console.log({
-    left: table.getLeftTotalSize(),
-    center: table.getCenterTotalSize(),
-    right: table.getRightTotalSize(),
-    containerWidth,
-    test: containerWidth - table.getLeftTotalSize() - table.getRightTotalSize()
-  })
-
-  useEffect(() => {
-    if (tableContainerRef.current) {
-      setContainerWidth(tableContainerRef.current.offsetWidth);
-    }
-  }, [tableContainerRef.current])
 
   return (
     <Flex flexDirection="column" alignItems="center" w="full">
